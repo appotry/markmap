@@ -1,8 +1,7 @@
-export * from './types';
-export * from './constants';
 export * from './transform';
+export * from './types';
+export * from './util';
 
 export const transformerVersions = {
-  'markmap-lib': 'process.env.VERSION',
-  d3: process.env.D3_VERSION,
+  'markmap-lib': __define__.LIB_VERSION,
 };
