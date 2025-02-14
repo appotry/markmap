@@ -2,11 +2,12 @@ import { defineConfig } from 'vite';
 
 const configEs = defineConfig({
   build: {
-    emptyOutDir: !process.env.KEEP_DIST,
+    emptyOutDir: false,
     minify: false,
     lib: {
       entry: 'src/index.ts',
       fileName: 'index',
+      cssFileName: 'style',
       formats: ['es'],
     },
     rollupOptions: {
@@ -17,11 +18,12 @@ const configEs = defineConfig({
 
 const configJs = defineConfig({
   build: {
-    emptyOutDir: !process.env.KEEP_DIST,
+    emptyOutDir: false,
     minify: false,
     lib: {
       entry: 'src/index.ts',
       fileName: () => 'index.js',
+      cssFileName: 'style',
       formats: ['iife'],
       name: 'markmap',
     },

@@ -1,6 +1,4 @@
 export interface IPureNode {
-  type: string;
-  depth: number;
   /**
    * HTML of the node content.
    */
@@ -9,6 +7,7 @@ export interface IPureNode {
    * Additional data created on transformation.
    */
   payload?: {
+    [key: string]: unknown;
     /**
      * The folding status of this node.
      *
@@ -17,18 +16,6 @@ export interface IPureNode {
      * 2 - folded along with all its child nodes
      */
     fold?: number;
-    /**
-     * Index of list items.
-     */
-    index?: number;
-    /**
-     * Start index of an ordered list.
-     */
-    startIndex?: number;
-    /**
-     * First and last lines of the source generating the node.
-     */
-    lines?: [startLine: number, endLine: number];
   };
   children: IPureNode[];
 }
@@ -54,10 +41,19 @@ export interface INodeState {
    * The unique identifier of a node, supposed to be based on content.
    */
   key: string;
-  el: HTMLElement;
-  x0: number;
-  y0: number;
+  /**
+   * 0-based depth of the node in the tree.
+   */
+  depth: number;
+  /** DOM element size */
   size: [width: number, height: number];
+  /** Position info, only available after layout */
+  rect: {
+    x: number;
+    y: number;
+    width: number;
+    height: number;
+  };
 }
 
 export type JSScriptItem = {
@@ -93,45 +89,13 @@ export type CSSStylesheetItem = {
 };
 export type CSSItem = CSSStyleItem | CSSStylesheetItem;
 
-export interface IWrapContext<T extends unknown[], U> {
-  args: T;
-  result?: U;
-}
-
 export interface IDeferred<T> {
   promise: Promise<T>;
   resolve: (value: T) => void;
   reject: (error?: unknown) => void;
 }
 
-export interface IMarkmapJSONOptions {
-  color?: string[];
-  colorFreezeLevel?: number;
-  duration?: number;
-  maxWidth?: number;
-  initialExpandLevel?: number;
-  extraJs?: string[];
-  extraCss?: string[];
-  zoom?: boolean;
-  pan?: boolean;
-}
-
-export interface IMarkmapOptions {
-  id?: string;
-  autoFit: boolean;
-  color: (node: INode) => string;
-  duration: number;
-  embedGlobalCSS: boolean;
-  fitRatio: number;
-  maxWidth: number;
-  nodeMinHeight: number;
-  paddingX: number;
-  scrollForPan: boolean;
-  spacingHorizontal: number;
-  spacingVertical: number;
-  initialExpandLevel: number;
-  zoom: boolean;
-  pan: boolean;
-  toggleRecursively: boolean;
-  style?: (id: string) => string;
+export interface IAssets {
+  styles?: CSSItem[];
+  scripts?: JSItem[];
 }

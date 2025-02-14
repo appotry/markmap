@@ -1,6 +1,6 @@
 {
   "name": "markmap-cli",
-  "version": "0.15.8",
+  "version": "0.18.11",
   "description": "Create markmaps from CLI",
   "author": "Gerald <gera2ld@live.com>",
   "license": "MIT",
@@ -25,10 +25,12 @@
     "url": "git+https://github.com/markmap/markmap.git"
   },
   "scripts": {
-    "clean": "del-cli dist",
+    "clean": "del-cli dist tsconfig.tsbuildinfo",
     "build:types": "tsc",
-    "build:js": "vite build",
-    "postinstall": "node -e \"import('./dist/index.js').then(({ fetchAssets }) => fetchAssets()).catch(() => {})\""
+    "build:js": "vite build && pnpm fetch-assets",
+    "build": "pnpm clean && pnpm /^build:/",
+    "fetch-assets": "node ./dist/fetch-assets.js",
+    "prepublishOnly": "pnpm build"
   },
   "bugs": {
     "url": "https://github.com/markmap/markmap/issues"
@@ -42,17 +44,18 @@
   ],
   "typings": "dist/index.d.ts",
   "dependencies": {
-    "@babel/runtime": "^7.23.6",
-    "@hono/node-server": "^1.3.3",
-    "chokidar": "^3.5.3",
-    "commander": "^11.1.0",
-    "hono": "^3.11.8",
+    "@babel/runtime": "^7.26.0",
+    "@hono/node-server": "^1.13.7",
+    "chokidar": "^4.0.1",
+    "commander": "^12.1.0",
+    "hono": "^4.6.13",
     "markmap-common": "workspace:*",
     "markmap-lib": "workspace:*",
+    "markmap-render": "workspace:*",
     "markmap-toolbar": "workspace:*",
-    "open": "^10.0.0",
-    "pkg-dir": "^8.0.0",
+    "open": "^10.1.0",
+    "portfinder": "^1.0.32",
     "read-package-up": "^11.0.0",
-    "update-notifier": "^7.0.0"
+    "update-notifier": "^7.3.1"
   }
 }

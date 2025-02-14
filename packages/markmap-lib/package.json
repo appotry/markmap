@@ -1,19 +1,21 @@
 {
   "name": "markmap-lib",
-  "version": "0.15.8",
+  "version": "0.18.11",
   "description": "Visualize your Markdown as mindmaps with Markmap",
   "author": "Gerald <gera2ld@live.com>",
   "license": "MIT",
   "scripts": {
-    "clean": "del-cli dist",
+    "clean": "del-cli dist tsconfig.tsbuildinfo",
     "build:types": "tsc",
-    "build:js": "vite build && TARGET=browserEs vite build --emptyOutDir=false && TARGET=browserJs vite build --emptyOutDir=false",
-    "test": "jest test"
+    "build:js": "vite build && TARGET=nodeLight vite build && TARGET=browserEs vite build && TARGET=browserJs vite build",
+    "build": "pnpm clean && pnpm /^build:/",
+    "prepublishOnly": "pnpm build"
   },
   "publishConfig": {
     "access": "public",
     "registry": "https://registry.npmjs.org/"
   },
+  "sideEffects": false,
   "main": "dist/index.js",
   "module": "dist/index.mjs",
   "unpkg": "dist/browser/index.iife.js",
@@ -24,6 +26,16 @@
       "browser": "./dist/browser/index.mjs",
       "require": "./dist/index.js",
       "default": "./dist/index.mjs"
+    },
+    "./plugins": {
+      "types": "./dist/plugins/index.d.ts",
+      "require": "./dist/plugins.js",
+      "default": "./dist/plugins.mjs"
+    },
+    "./no-plugins": {
+      "types": "./dist/index.d.ts",
+      "require": "./dist/index.no-plugins.js",
+      "default": "./dist/index.no-plugins.mjs"
     },
     "./package.json": "./package.json"
   },
@@ -46,31 +58,27 @@
   },
   "devDependencies": {
     "@highlightjs/cdn-assets": "^11.8.0",
-    "@types/remarkable": "^2.0.3",
+    "@types/katex": "^0.16.7",
+    "@types/markdown-it": "^14.0.0",
     "markmap-common": "workspace:*",
-    "markmap-view": "workspace:*",
     "webfontloader": "^1.6.28"
   },
   "dependencies": {
     "@babel/runtime": "^7.22.6",
+    "@vscode/markdown-it-katex": "^1.1.0",
     "highlight.js": "^11.8.0",
-    "js-yaml": "^4.1.0",
     "katex": "^0.16.8",
+    "markdown-it": "^14.1.0",
+    "markdown-it-ins": "^4.0.0",
+    "markdown-it-mark": "^4.0.0",
+    "markdown-it-sub": "^2.0.0",
+    "markdown-it-sup": "^2.0.0",
+    "markmap-html-parser": "workspace:*",
+    "markmap-view": "workspace:*",
     "prismjs": "^1.29.0",
-    "remarkable": "^2.0.1",
-    "remarkable-katex": "^1.2.1"
+    "yaml": "^2.5.1"
   },
   "peerDependencies": {
     "markmap-common": "*"
-  },
-  "jest": {
-    "transform": {
-      "\\.ts$": [
-        "babel-jest",
-        {
-          "rootMode": "upward"
-        }
-      ]
-    }
   }
 }

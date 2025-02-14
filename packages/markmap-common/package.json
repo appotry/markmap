@@ -1,13 +1,15 @@
 {
   "name": "markmap-common",
-  "version": "0.15.6",
+  "version": "0.18.9",
   "description": "",
   "author": "",
   "license": "MIT",
   "scripts": {
-    "clean": "del-cli dist",
+    "clean": "del-cli dist tsconfig.tsbuildinfo",
     "build:types": "tsc",
-    "build:js": "vite build"
+    "build:js": "vite build",
+    "build": "pnpm clean && pnpm /^build:/",
+    "prepublishOnly": "pnpm build"
   },
   "main": "dist/index.js",
   "module": "dist/index.mjs",

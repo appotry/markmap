@@ -1,26 +1,28 @@
 import {
-  urlBuilder,
-  buildJSItem,
   buildCSSItem,
+  buildJSItem,
   loadCSS,
   loadJS,
+  urlBuilder,
 } from 'markmap-common';
 import type { Transformer } from 'markmap-lib';
 import type { AutoLoaderOptions } from './types';
 
+export * from './types';
+
 const enabled: Record<string, boolean> = {};
 
-const autoLoaderOptions: AutoLoaderOptions = {
+const autoLoaderOptions = {
   baseJs: [
-    `d3@${process.env.D3_VERSION}`,
-    `markmap-lib@${process.env.LIB_VERSION}`,
-    `markmap-view@${process.env.VIEW_VERSION}`,
-    `markmap-toolbar@${process.env.TOOLBAR_VERSION}`,
+    `d3@${__define__.D3_VERSION}`,
+    `markmap-lib@${__define__.LIB_VERSION}`,
+    `markmap-view@${__define__.VIEW_VERSION}`,
+    `markmap-toolbar@${__define__.TOOLBAR_VERSION}`,
   ],
-  baseCss: [`markmap-toolbar@${process.env.TOOLBAR_VERSION}/dist/style.css`],
+  baseCss: [`markmap-toolbar@${__define__.TOOLBAR_VERSION}/dist/style.css`],
   manual: false,
   toolbar: false,
-  ...window.markmap?.autoLoader,
+  ...(window.markmap?.autoLoader as Partial<AutoLoaderOptions>),
 };
 
 async function initialize() {
@@ -103,11 +105,11 @@ export function render(el: HTMLElement) {
     });
     el.append(toolbar);
   }
-  const doRender = () => {
+  const doRender = async () => {
     const { root, frontmatter } = transform(transformer, content);
     const markmapOptions = frontmatter?.markmap;
     const frontmatterOptions = deriveOptions(markmapOptions);
-    mm.setData(root, frontmatterOptions);
+    await mm.setData(root, frontmatterOptions);
     mm.fit();
   };
   transformer.hooks.retransform.tap(doRender);
